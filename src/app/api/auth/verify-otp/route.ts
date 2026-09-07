@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
     //Update the user's emailVerified status in the database
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db("smartdrop");
 
     const result = await db.collection("users").updateOne(
       { email:normalizedEmail },

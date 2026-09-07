@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowRight, LockIcon, Timer, Zap } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
@@ -21,14 +22,14 @@ export default function Hero() {
             </span>
             <span className="text-cyan-500 ">Drop it.</span>
           </h1>
-          <p className="text-lg italic text-zinc-500 mt-10">
+          <p className="text-sm italic text-zinc-500 mt-10">
             Send files securely with smart, temporary links. Choose who gets
             access, control how long it stays available, and let your data
             disappear when you’re done.
           </p>
           <Link
             href="/"
-            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-cyan-500/30 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-zinc-500/30 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
           >
             Get Started{" "}
             <ArrowRight
@@ -83,7 +84,18 @@ export default function Hero() {
         </div>
       </div>
 
-      <div>Right Div</div>
+      <div className="h-full w-175 ">
+        <Image
+          src="/hero.png"
+          alt="Hero Image"
+          priority
+          width={1000}
+          height={1000}
+          className="h-full w-full active:scale-95 duration-300 transition-all ease-in-out hover:scale-105"
+        />
+
+        
+      </div>
     </section>
   );
 }

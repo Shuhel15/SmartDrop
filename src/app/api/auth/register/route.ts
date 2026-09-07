@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db("smartdrop");
 
     //Checking if the user already exists
     const existingUser = await db.collection("users").findOne({ normalizedEmail });

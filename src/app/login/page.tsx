@@ -42,12 +42,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-10">
-      <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
-      <div className="absolute -bottom-40 -right-24 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
-
+    <main className="mt-40 flex justify-center items-center ">
+      
       <section className="relative grid w-full max-w-4xl overflow-hidden border border-white/10 bg-white shadow-2xl shadow-cyan-950/30 lg:grid-cols-2">
         <div className="hidden flex-col justify-between bg-linear-to-br from-cyan-500 to-blue-700 p-10 text-white lg:flex">
+          
           <div>
             <div className="mb-16 flex items-center gap-3">
               <span className="flex h-10 w-10 items-center border rounded-lg justify-center bg-white/20 text-lg font-bold">
@@ -72,7 +71,7 @@ export default function LoginPage() {
 
         <div className="p-7 sm:p-10">
           <div className="mb-8 lg:hidden">
-            <p className="text-xl font-bold text-cyan-600">SmartDrop</p>
+            <p className="text-xl font-bold text-cyan-600">Smart<span className="text-black/70">Drop</span></p>
           </div>
           <div className="mb-8">
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-cyan-600">

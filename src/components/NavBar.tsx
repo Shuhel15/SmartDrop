@@ -25,19 +25,18 @@ export default function NavBar() {
     }
   };
 
-
   return (
-    <main className="fixed z-50 mx-auto mb-8 mt-2 w-full max-w-7xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-lg">
+    <main className="fixed left-1/2 top-2 z-50 w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 border border-black/10 bg-white/80 shadow-lg backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="#home"
           onClick={() => setIsOpen(false)}
           className="group relative overflow-hidden"
         >
-          <div className="relative flex h-10 w-10 items-center justify-center border-white/20 bg-cyan-500 text-xl font-bold text-white shadow-lg shadow-cyan-500/30">
-            <span className="absolute inset-x-0 bottom-0 h-full origin-bottom scale-y-0 bg-blue-600 transition-transform duration-300 ease-out group-hover:scale-y-100" />
+          <div className="group relative flex h-10 w-10 items-center justify-center border-white/20 bg-cyan-500 text-xl font-bold text-white shadow-lg shadow-cyan-500/30">
+            <span className="absolute inset-x-0 bottom-0 h-full origin-bottom scale-y-0 bg-cyan-600 transition-transform duration-300 ease-out group-hover:scale-y-100" />
 
-            <span className="relative z-10">S</span>
+            <span className="relative z-10 group-hover:transition-transform group-hover:rotate-180 duration-500">S</span>
           </div>
         </Link>
 
@@ -47,7 +46,7 @@ export default function NavBar() {
             <Link
               key={link.href}
               href={link.href}
-              className="group relative overflow-hidden px-4 py-2 transition-colors duration-300"
+              className="group relative overflow-hidden px-4 py-2 space-x-2 transition-colors duration-300"
             >
               <span className="absolute inset-x-0 bottom-0 h-full origin-bottom scale-y-0 bg-cyan-500/10 transition-transform duration-300 ease-out group-hover:scale-y-100" />
 
@@ -61,7 +60,7 @@ export default function NavBar() {
           <button
             type="button"
             onClick={handleAuth}
-            className="group relative overflow-hidden bg-cyan-500 px-4 py-2 font-semibold text-white shadow-lg shadow-cyan-500/30 transition-colors duration-300 hover:bg-cyan-600"
+            className="group relative overflow-hidden bg-cyan-500 px-4 py-2 font-semibold text-white transition-colors duration-300 hover:bg-cyan-600"
           >
             <span className="absolute inset-x-0 bottom-0 h-full origin-bottom scale-y-0 bg-cyan-600 transition-transform duration-300 ease-out group-hover:scale-y-100" />
 
@@ -112,7 +111,7 @@ export default function NavBar() {
               handleAuth();
               setIsOpen(false);
             }}
-            className="mt-2 rounded-lg border border-cyan-500 px-4 py-3 text-left font-semibold text-zinc-600 transition-all duration-300 hover:bg-cyan-500 hover:text-white"
+            className="mt-2 bg-cyan-500 px-4 py-3 text-left font-semibold text-zinc-600 transition-all duration-300 hover:bg-cyan-500 hover:text-white"
           >
             {" "}
             {session ? "Logout" : "Login"}{" "}
