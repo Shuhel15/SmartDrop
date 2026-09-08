@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export default function RegistrationPage() {
   const router = useRouter();
@@ -53,8 +54,8 @@ export default function RegistrationPage() {
     }
   }
   return (
-    <main className="mt-40 flex justify-center items-center ">
-      <section className="relative grid w-full max-w-4xl overflow-hidden border border-white/10 bg-white shadow-2xl shadow-cyan-950/30 lg:grid-cols-2">
+    <motion.main className="mt-40 flex justify-center items-center " initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      <motion.section className="relative grid w-full max-w-4xl overflow-hidden border border-white/10 bg-white shadow-2xl shadow-cyan-950/30 lg:grid-cols-2" initial={{ opacity: 0, y: 28, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
         <div className="hidden flex-col justify-between bg-linear-to-br from-cyan-500 to-blue-700 p-10 text-white lg:flex">
           <div>
             <div className="mb-16 flex items-center gap-3">
@@ -207,7 +208,7 @@ export default function RegistrationPage() {
             </Link>
           </p>
         </div>
-      </section>
-    </main>
+      </motion.section>
+    </motion.main>
   );
 }

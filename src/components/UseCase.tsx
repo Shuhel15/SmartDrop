@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -40,11 +41,11 @@ const useCases = [
 
 export default function UseCases() {
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-28 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <motion.section className="relative overflow-hidden bg-white py-24 sm:py-28 lg:py-32" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}>
+      <div className="mx-auto max-w-7xl ">
 
         {/* Header */}
-        <div className="mb-14 flex flex-col justify-between gap-8 lg:mb-16 lg:flex-row lg:items-end">
+        <motion.div className="mb-14 flex flex-col justify-between gap-8 lg:mb-16 lg:flex-row lg:items-end" variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}>
           <div>
             <div className="mb-5 flex items-center gap-3">
               <span className="h-px w-10 bg-cyan-500" />
@@ -64,7 +65,7 @@ export default function UseCases() {
             Whether you&apos;re working with a team, building a project, or sending
             something to a friend — sharing should stay simple.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
 
@@ -74,7 +75,7 @@ export default function UseCases() {
               const Icon = item.icon;
 
               return (
-                <div
+                <motion.div
                   key={item.number}
                   className={`
                     group relative overflow-hidden border-b border-r border-slate-200
@@ -83,6 +84,8 @@ export default function UseCases() {
                     ${item.featured ? "col-span-2 min-h-70" : "min-h-57.5"}
                     ${item.wide ? "col-span-2 min-h-47.5" : ""}
                   `}
+                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55 } } }}
+                  whileHover={{ y: -5 }}
                 >
                   {/* Cyan hover indicator */}
                   <div className="absolute left-0 top-0 h-0 w-1 bg-cyan-500 transition-all duration-500 group-hover:h-full" />
@@ -132,13 +135,13 @@ export default function UseCases() {
                   <span className="pointer-events-none absolute -bottom-8 -right-2 text-[110px] font-bold leading-none text-slate-100 transition-colors duration-500 group-hover:text-slate-900">
                     {item.number}
                   </span>
-                </div>
+                </motion.div>
               );
             })}
           </div>
 
           {/* Right — Image */}
-          <div className="relative min-h-130 overflow-hidden border border-slate-200 lg:min-h-full">
+          <motion.div className="relative min-h-130 overflow-hidden border border-slate-200 lg:min-h-full" variants={{ hidden: { opacity: 0, scale: 0.97 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } } }}>
 
             {/* Image */}
             <Image
@@ -165,11 +168,11 @@ export default function UseCases() {
                 Share without limits
               </span>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom line */}
-        <div className="mt-12 flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <motion.div className="mt-12 flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7 } } }}>
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
             One simple link. Multiple possibilities.
           </p>
@@ -178,9 +181,9 @@ export default function UseCases() {
             <span className="h-1.5 w-1.5 bg-cyan-500" />
             Made for everyday sharing
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Download,
   LockKeyholeIcon,
@@ -38,10 +39,10 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="w-full">
+    <motion.section id="how-it-works" className="w-full" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
         {/* LEFT */}
-        <div>
+        <motion.div variants={{ hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0, transition: { duration: 0.7 } } }}>
           <p className="flex items-center gap-2 text-xs font-bold tracking-widest text-cyan-500 m-5 ">
             <span className="h-0.5 w-5 bg-cyan-500" />
             HOW IT WORKS
@@ -57,15 +58,17 @@ export default function HowItWorks() {
               drop.
             </span>
           </h1>
-        </div>
+        </motion.div>
 
         {/* RIGHT */}
         <div className="w-full">
           <div className="grid grid-cols-1">
             {steps.map((step) => (
-              <div
+              <motion.div
                 key={step.step}
                 className="group flex gap-4 border-t border-zinc-900/10 py-7 sm:gap-6 md:py-8"
+                variants={{ hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0, transition: { duration: 0.55 } } }}
+                whileHover={{ x: 6 }}
               >
                 <div className="flex shrink-0 items-start gap-3 sm:gap-4">
                   <span className="pt-1 text-xs font-bold text-zinc-400 sm:text-sm">
@@ -86,11 +89,11 @@ export default function HowItWorks() {
                     {step.description}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

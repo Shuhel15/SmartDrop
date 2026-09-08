@@ -4,6 +4,7 @@ import AuthSessionProvider from "@/components/SessionProvider";
 import { Toaster } from "sonner";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
             <Toaster position="top-right" richColors />
           </AuthSessionProvider>
+        <Footer/>
         </main>
       </body>
     </html>

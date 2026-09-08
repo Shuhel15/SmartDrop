@@ -1,9 +1,10 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
-export default function VerifyEmailPage() {
+function VerifyEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
@@ -105,8 +106,8 @@ export default function VerifyEmailPage() {
     }
   }
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md border p-6">
+    <motion.main className="flex min-h-screen items-center justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      <motion.div className="w-full max-w-md border p-6" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
         <h1 className="mb-2 text-3xl font-bold">Verify your email</h1>
 
         <p className="mb-6 text-gray-500">
@@ -159,7 +160,23 @@ export default function VerifyEmailPage() {
                 : "Resend OTP"}
           </button>
         </div>
-      </div>
-    </main>
+      </motion.div>
+    </motion.main>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center">
+          <div className="w-full max-w-md border p-6 text-center text-gray-500">
+            Loading verification…
+          </div>
+        </main>
+      }
+    >
+      <VerifyEmailForm />
+    </Suspense>
   );
 }

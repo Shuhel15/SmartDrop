@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,9 +43,9 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mt-40 flex justify-center items-center ">
+    <motion.main className="mt-40 flex justify-center items-center " initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       
-      <section className="relative grid w-full max-w-4xl overflow-hidden border border-white/10 bg-white shadow-2xl shadow-cyan-950/30 lg:grid-cols-2">
+      <motion.section className="relative grid w-full max-w-4xl overflow-hidden border border-white/10 bg-white shadow-2xl shadow-cyan-950/30 lg:grid-cols-2" initial={{ opacity: 0, y: 28, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
         <div className="hidden flex-col justify-between bg-linear-to-br from-cyan-500 to-blue-700 p-10 text-white lg:flex">
           
           <div>
@@ -158,7 +159,7 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-      </section>
-    </main>
+      </motion.section>
+    </motion.main>
   );
 }

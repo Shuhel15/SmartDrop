@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "framer-motion": "^13.2.0",
     "ioredis": "^6.0.0",
     "lucide-react": "^1.41.0",
     "mongodb": "^7.6.0",
@@ -18,6 +19,7 @@
     "nodemailer": "^8.0.11",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-icons": "^5.7.0",
     "sonner": "^2.0.8"
   },
   "devDependencies": {

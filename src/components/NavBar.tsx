@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
@@ -26,7 +27,7 @@ export default function NavBar() {
   };
 
   return (
-    <main className="fixed left-1/2 top-2 z-50 w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 border border-black/10 bg-white/80 shadow-lg backdrop-blur-xl">
+    <motion.main className="fixed left-1/2 top-2 z-50 w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 border border-black/10 bg-white/80 shadow-lg backdrop-blur-lg" initial={{ opacity: 0, y: -24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="#home"
@@ -118,6 +119,6 @@ export default function NavBar() {
           </button>
         </nav>
       </div>
-    </main>
+    </motion.main>
   );
 }

@@ -1,5 +1,6 @@
 import {auth} from "@/lib/auth";
 import { redirect } from "next/navigation";
+import DashboardContent from "@/components/DashboardContent";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -8,15 +9,5 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  return(
-    <main>
-      <h1>SmartDrop Dashboard</h1>
-
-      <p>
-        Welcome, {session.user.name}
-      </p>
-      <p>Email: {session.user.email}</p>
-      <p>Role : {session.user.role}</p>
-    </main>
-  )
+  return <DashboardContent name={session.user.name} email={session.user.email} role={session.user.role} />;
 }

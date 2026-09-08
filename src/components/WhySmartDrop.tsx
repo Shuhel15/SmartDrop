@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, type Variants } from "framer-motion";
 import { Hourglass, LockKeyhole, UserShield, Zap } from "lucide-react";
 
 const features = [
@@ -25,6 +26,33 @@ const features = [
   },
 ];
 
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const featureGrid: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+};
+
+const cardReveal: Variants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export default function WhySmartDrop() {
   return (
     <section
@@ -32,31 +60,60 @@ export default function WhySmartDrop() {
       className="mt-16 sm:mt-20 lg:mt-24"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="text-center">
-          <p className="inline-flex items-center gap-3 text-xs font-bold tracking-[0.25em] text-cyan-500">
+        <motion.div
+          className="text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          variants={reveal}
+        >
+          <motion.p
+            className="inline-flex items-center gap-3 text-xs font-bold tracking-[0.25em] text-cyan-500"
+            variants={reveal}
+          >
             <span className="h-px w-6 bg-cyan-500" />
             WHY SMARTDROP
             <span className="h-px w-6 bg-cyan-500" />
-          </p>
+          </motion.p>
 
-          <h2 className="mx-auto mt-5 max-w-5xl text-4xl font-extrabold leading-[1.05] tracking-tight text-zinc-900 sm:text-5xl md:text-6xl lg:text-7xl">
+          <motion.h2
+            className="mx-auto mt-5 max-w-5xl text-4xl font-extrabold leading-[1.05] tracking-tight text-zinc-900 sm:text-5xl md:text-6xl lg:text-7xl"
+            variants={reveal}
+          >
             Sharing files shouldn&apos;t mean{" "}
             <span className="text-cyan-500">losing control.</span>
-          </h2>
+          </motion.h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-zinc-500 sm:text-base">
+          <motion.p
+            className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-zinc-500 sm:text-base"
+            variants={reveal}
+          >
             Simple file sharing with the privacy, security, and control you
             need.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <motion.div
+          className="mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={featureGrid}
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
               className="group relative overflow-hidden py-6 sm:py-7 transition-all duration-300 hover:-translate-y-1"
+              variants={cardReveal}
+              whileHover={{ y: -6 }}
             >
-              <div className="absolute left-0 top-0 h-px w-0 bg-cyan-500 transition-all duration-500 group-hover:w-full" />
+              <motion.div
+                className="absolute left-0 top-0 h-px w-full origin-left bg-cyan-500"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.12 + 0.3 }}
+              />
 
               <div className="flex h-12 w-12 items-center justify-center bg-cyan-500/10 text-cyan-500 transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white">
                 {feature.icon}
@@ -73,9 +130,9 @@ export default function WhySmartDrop() {
               </div>
 
               <span className="absolute bottom-0 left-0 h-px w-8 bg-zinc-200 transition-all duration-300 group-hover:w-full group-hover:bg-cyan-500" />
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

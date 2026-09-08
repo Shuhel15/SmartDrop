@@ -1,32 +1,56 @@
+"use client";
+import { motion } from "framer-motion";
 import { ArrowDown, ArrowRight, LockIcon, Timer, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section
+    <motion.section
       id="home"
       className="relative mt-10 grid grid-cols-1 items-center gap-8 py-16  lg:grid-cols-2 lg:gap-12  lg:py-24"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.12 } },
+      }}
     >
-      <div>
+      <motion.div
+        variants={{
+          hidden: { opacity: 0, x: -32 },
+          visible: {
+            opacity: 1,
+            x: 0,
+            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+          },
+        }}
+      >
         <div>
-          <p className="text-xs tracking-widest font-bold text-cyan-500 flex flex-row items-center gap-2">
+          <motion.p
+            className="text-xs tracking-widest font-bold text-cyan-500 flex flex-row items-center gap-2"
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+          >
             <span className="w-5 h-0.5 bg-cyan-500" />
             SMART FILE SHARING
-          </p>
-          <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight text-zinc-900 text-shadow-lg text-shadow-black/20">
+          </motion.p>
+          <motion.h1
+            className="text-6xl md:text-8xl font-extrabold tracking-tight text-zinc-900 text-shadow-lg text-shadow-black/20"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
             Share it.
             <span className="text-zinc-500/40 text-shadow-none">
               {" "}
               Control it.{" "}
             </span>
             <span className="text-cyan-500 ">Drop it.</span>
-          </h1>
-          <p className="text-sm italic text-zinc-500 mt-10">
+          </motion.h1>
+          <motion.p className="text-sm italic text-zinc-500 mt-10" variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
             Send files securely with smart, temporary links. Choose who gets
             access, control how long it stays available, and let your data
             disappear when you’re done.
-          </p>
+          </motion.p>
+          <motion.div variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
           <Link
             href="/"
             className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
@@ -47,7 +71,8 @@ export default function Hero() {
               className="group-hover:transition-transform group-hover:translate-y-1"
             />
           </Link>
-          <div className="mt-8 flex w-full flex-row items-center gap-2 sm:gap-4">
+          </motion.div>
+          <motion.div className="mt-8 flex w-full flex-row items-center gap-2 sm:gap-4" variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
             <div className="min-w-0 flex-1 border-r border-black/30 px-2 sm:px-4">
               <h1 className="flex items-center gap-1 text-sm font-semibold sm:gap-2 sm:text-base">
                 <LockIcon size={16} className="shrink-0 sm:h-4.5 sm:w-4.5" />
@@ -80,11 +105,22 @@ export default function Hero() {
                 Links expire automatically.
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="w-full h-auto md:w-175 md:h-full">
+      <motion.div
+        className="w-full h-auto md:w-175 md:h-full"
+        variants={{
+          hidden: { opacity: 0, scale: 0.92, x: 32 },
+          visible: {
+            opacity: 1,
+            scale: 1,
+            x: 0,
+            transition: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+          },
+        }}
+      >
         <Image
           src="/hero.png"
           alt="Hero Image"
@@ -93,7 +129,7 @@ export default function Hero() {
           height={1000}
           className="w-full h-auto object-contain transition-all duration-300 ease-in-out hover:scale-105 active:scale-95"
         />
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }
