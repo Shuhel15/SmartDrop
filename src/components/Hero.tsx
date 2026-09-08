@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative mt-10 grid grid-cols-1 items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-24"
+      className="relative mt-10 grid grid-cols-1 items-center gap-8 py-16  lg:grid-cols-2 lg:gap-12  lg:py-24"
     >
       <div>
         <div>
@@ -29,7 +29,7 @@ export default function Hero() {
           </p>
           <Link
             href="/"
-            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-zinc-500/30 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
           >
             Get Started{" "}
             <ArrowRight
@@ -39,7 +39,7 @@ export default function Hero() {
           </Link>
           <Link
             href="#how-it-works"
-            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 text-lg font-semibold text-zinc-900 shadow-lg shadow-zinc-500/30 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 text-lg font-semibold text-zinc-900 shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
           >
             How it works{" "}
             <ArrowDown
@@ -84,17 +84,15 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="h-full w-175 ">
+      <div className="w-full h-auto md:w-175 md:h-full">
         <Image
           src="/hero.png"
           alt="Hero Image"
           priority
           width={1000}
           height={1000}
-          className="h-full w-full active:scale-95 duration-300 transition-all ease-in-out hover:scale-105"
+          className="w-full h-auto object-contain transition-all duration-300 ease-in-out hover:scale-105 active:scale-95"
         />
-
-        
       </div>
     </section>
   );
