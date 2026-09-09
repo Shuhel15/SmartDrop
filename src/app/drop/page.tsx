@@ -7,15 +7,21 @@ import {
   X,
   ShieldCheck,
   Link as LinkIcon,
+  Check,
+  Copy,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, DragEvent, useEffect, useState } from "react";
 import Loader from "@/components/loader";
 import { toast } from "sonner";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 
 const expiryOptions = [
+  { label: "5 Minutes", value: "5m" },
+  { label: "10 Minutes", value: "10m" },
+  { label: "20 Minutes", value: "20 min" },
+  { label: "30 Minutes", value: "30 min" },
   { label: "1 Hour", value: "1h" },
   { label: "6 Hours", value: "6h" },
   { label: "12 Hours", value: "12h" },
@@ -29,8 +35,10 @@ export default function DropPage() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
-  const [expiry, setExpiry] = useState("24h");
+  const [expiry, setExpiry] = useState("5m");
   const [isDragging, setIsDragging] = useState(false);
+  const [generatedLink, setGeneratedLink] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     //if user is not loggedin then redirect to login page
@@ -83,19 +91,60 @@ export default function DropPage() {
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!file) {
       toast.error("Please select a file first.");
       return;
     }
 
-    console.log({
-      file,
-      password,
-      expiry,
-    });
+    if (!password) {
+      toast.error("Please enter a password.");
+      return;
+    }
 
-    toast.error("Drop generation will be connected next.");
+    try {
+      const response = await fetch("/api/auth/drop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileSize: file.size,
+          password,
+          expiry,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.message || "Failed to create drop.");
+        return;
+      }
+
+      //Link generated successfully
+      const fullLink = `${process.env.NEXT_PUBLIC_APP_URL}${data.link}`;
+      setGeneratedLink(fullLink);
+
+      console.log("Generated Link:", fullLink);
+    } catch (error) {
+      console.error("Error creating drop:", error);
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+  };
+  //Copy Function
+  const handleCopy = async () => {
+    if (!generatedLink) return;
+
+    await navigator.clipboard.writeText(generatedLink);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   return (
@@ -254,11 +303,11 @@ export default function DropPage() {
             type="button"
             onClick={handleGenerate}
             disabled={!file}
-            className="group relative mt-8 flex h-13 w-full items-center justify-center gap-2 overflow-hidden bg-cyan-500 px-6 font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+            className="group relative mt-8 flex h-13 w-full items-center justify-center gap-2 overflow-hidden bg-cyan-500 px-6 font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none active:scale-95 ease-in-out"
           >
             <span className="absolute inset-0 origin-bottom scale-y-0 bg-cyan-500 transition-transform duration-300 group-hover:scale-y-100" />
 
-            <span className="group relative z-10 flex items-center gap-2">
+            <span className="group relative z-10 flex items-center gap-2 ">
               <LinkIcon
                 size={18}
                 className="group-hover:transition-transform group-hover:rotate-45 duration-300"
@@ -266,6 +315,54 @@ export default function DropPage() {
               Generate Secure Link
             </span>
           </button>
+
+          {/* Copy link */}
+          {generatedLink && (
+            <div className="mt-6 border border-cyan-500/20 bg-cyan-500/5 p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-600">
+                  <LinkIcon size={16} />
+                </div>
+
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    Your drop is ready
+                  </p>
+
+                  <p className="text-xs text-slate-500">
+                    Share this link with the recipient.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 border border-slate-200 bg-white p-2">
+                <input
+                  type="text"
+                  value={generatedLink}
+                  readOnly
+                  className="min-w-0 flex-1 bg-transparent px-2 text-sm text-slate-600 outline-none"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="flex shrink-0 items-center gap-2 bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-600"
+                >
+                  {copied ? (
+                    <>
+                      <Check size={16} />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={16} />
+                      Copy
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Bottom Info */}
           <div className="mt-5 flex items-center justify-center gap-2 text-xs text-slate-400">

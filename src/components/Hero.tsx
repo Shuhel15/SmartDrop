@@ -35,7 +35,7 @@ export default function Hero() {
             SMART FILE SHARING
           </motion.p>
           <motion.h1
-            className="text-6xl md:text-8xl font-extrabold tracking-tight text-zinc-900 text-shadow-lg text-shadow-black/20"
+            className="text-6xl md:text-8xl font-extrabold tracking-tight text-zinc-900 "
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
             Share it.
@@ -53,22 +53,22 @@ export default function Hero() {
           <motion.div variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
           <Link
             href="/drop"
-            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-medium text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 font-semibold text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
           >
             Get Started{" "}
             <ArrowRight
               size={18}
-              className="group-hover:transition-transform group-hover:translate-x-1"
+              className="group-hover:transition-transform group-hover:translate-x-1 duration-300"
             />
           </Link>
           <Link
             href="#how-it-works"
-            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 text-lg font-medium text-zinc-900 shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 font-semibold text-zinc-900 shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
           >
             How it works{" "}
             <ArrowDown
               size={20}
-              className="group-hover:transition-transform group-hover:translate-y-1"
+              className="group-hover:transition-transform group-hover:translate-y-1 duration-300"
             />
           </Link>
           </motion.div>
@@ -110,15 +110,14 @@ export default function Hero() {
       </motion.div>
 
       <motion.div
-        className="w-full h-auto md:w-175 md:h-full"
-        variants={{
-          hidden: { opacity: 0, scale: 0.92, x: 32 },
-          visible: {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            transition: { duration: 1, ease: [0.22, 1, 0.36, 1] },
-          },
+        className="w-full h-auto md:w-175 md:h-full flex items-center justify-center mx-auto"
+        animate={{
+          y: [0, -15, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
       >
         <Image

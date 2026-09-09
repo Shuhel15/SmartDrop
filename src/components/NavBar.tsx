@@ -30,7 +30,7 @@ export default function NavBar() {
     <motion.main className="fixed left-1/2 top-2 z-50 w-[calc(100%-1rem)] max-w-7xl -translate-x-1/2 border border-black/10 bg-white/80 shadow-lg backdrop-blur-lg" initial={{ opacity: 0, y: -24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
-          href="#home"
+          href="/"
           onClick={() => setIsOpen(false)}
           className="group relative overflow-hidden"
         >
