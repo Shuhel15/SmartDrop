@@ -11,7 +11,6 @@ type DashboardContentProps = {
 export default function DashboardContent({
   name,
   email,
-  role,
 }: DashboardContentProps) {
   return (
     <motion.main

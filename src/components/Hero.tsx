@@ -52,8 +52,8 @@ export default function Hero() {
           </motion.p>
           <motion.div variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
           <Link
-            href="/"
-            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-semibold text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
+            href="/drop"
+            className="group mt-8 inline-flex items-center gap-2 bg-cyan-500  px-4  py-3 text-lg font-medium text-white shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-cyan-600 active:scale-95 duration-300 transition-all ease-in-out"
           >
             Get Started{" "}
             <ArrowRight
@@ -63,7 +63,7 @@ export default function Hero() {
           </Link>
           <Link
             href="#how-it-works"
-            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 text-lg font-semibold text-zinc-900 shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
+            className="group mt-8 ml-4 inline-flex items-center gap-2 px-4  py-3 text-lg font-medium text-zinc-900 shadow-lg shadow-zinc-500/30 hover:-translate-y-2 hover:bg-zinc-100 active:scale-95 duration-300 transition-all ease-in-out"
           >
             How it works{" "}
             <ArrowDown

@@ -34,21 +34,21 @@ export default function Footer() {
               <div className="flex flex-col gap-3 text-sm">
                 <a
                   href="#home"
-                  className="transition-colors text-black/50 hover:text-cyan-500"
+                  className=" text-black/50 hover:text-cyan-500 hover:translate-x-1 transition-all duration-300"
                 >
                   Home
                 </a>
 
                 <a
                   href="#how-it-works"
-                  className="transition-colors text-black/50 hover:text-cyan-500"
+                  className=" text-black/50 hover:text-cyan-500 hover:translate-x-1 transition-all duration-300"
                 >
                   How it works
                 </a>
 
                 <a
                   href="#features"
-                  className="transition-colors text-black/50 hover:text-cyan-500"
+                  className=" text-black/50 hover:text-cyan-500 hover:translate-x-1 transition-all duration-300"
                 >
                   Features
                 </a>
