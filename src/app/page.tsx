@@ -11,8 +11,8 @@ export default async function Home() {
 <>
 <Hero/>
 <About/>
-<Features/>
 <HowItWorks/>
+<Features/>
 <WhySmartDrop/>
 <UseCase/>
 <CTA/>

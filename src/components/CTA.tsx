@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -16,13 +17,15 @@ export default function CTA() {
           Share your files. Send the link. Done. Fast, simple and secure file
           sharing without the hassle.
         </p>
-        <button className="group mt-10 flex items-center justify-center gap-2 bg-black px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 active:scale-95">
+        <Link
+        href="/drop"
+         className="group mt-10 flex items-center justify-center gap-2 bg-black px-6 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800 active:scale-95">
           Get Started
           <ArrowUpRight
             size={20}
             className="transition-transform duration-300 group-hover:rotate-45"
           />
-        </button>
+        </Link>
       </motion.div>
     </motion.section>
   );

@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "/" },
   { label: "About", href: "#about" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Features", href: "#features" },
