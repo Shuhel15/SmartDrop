@@ -121,7 +121,7 @@ export default function Hero() {
         }}
       >
         <Image
-          src="/hero.png"
+          src="/Hero.png"
           alt="Hero Image"
           priority
           width={1000}
