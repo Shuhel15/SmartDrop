@@ -20,8 +20,8 @@ import { motion } from "framer-motion";
 const expiryOptions = [
   { label: "5 Minutes", value: "5m" },
   { label: "10 Minutes", value: "10m" },
-  { label: "20 Minutes", value: "20 min" },
-  { label: "30 Minutes", value: "30 min" },
+  { label: "20 Minutes", value: "20m" },
+  { label: "30 Minutes", value: "30m" },
   { label: "1 Hour", value: "1h" },
   { label: "6 Hours", value: "6h" },
   { label: "12 Hours", value: "12h" },
@@ -39,9 +39,11 @@ export default function DropPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    //if user is not loggedin then redirect to login page
+    //If user is not loggedin then redirect to login page
     if (status === "unauthenticated") {
       router.push("/login");
     }
@@ -50,7 +52,7 @@ export default function DropPage() {
   if (status === "loading") {
     return <Loader />;
   }
-  //if user is not logged in
+  //If user is not logged in
   if (status === "unauthenticated") {
     return null;
   }
@@ -93,47 +95,56 @@ export default function DropPage() {
 
   const handleGenerate = async () => {
     if (!file) {
-      toast.error("Please select a file first.");
+      setError("Please select a file.");
       return;
     }
 
-    if (!password) {
-      toast.error("Please enter a password.");
+    if (!password.trim()) {
+      setError("Please enter a password.");
       return;
     }
+
+    if (!expiry) {
+      setError("Please select an expiry time.");
+      return;
+    }
+
+    setError("");
+    setIsLoading(true);
 
     try {
+      const formData = new FormData();
+
+      formData.append("file", file);
+      formData.append("password", password);
+      formData.append("expiry", expiry);
+
       const response = await fetch("/api/auth/drop", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileSize: file.size,
-          password,
-          expiry,
-        }),
+        body: formData,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.message || "Failed to create drop.");
+        const message = data?.message || "Failed to create drop.";
+        setError(message);
+        toast.error(message);
         return;
       }
 
-      //Link generated successfully
-      const fullLink = `${process.env.NEXT_PUBLIC_APP_URL}${data.link}`;
-      setGeneratedLink(fullLink);
-
-      console.log("Generated Link:", fullLink);
+      setGeneratedLink(`${window.location.origin}${data.link}`);
+      toast.success("Secure link generated successfully.");
     } catch (error) {
       console.error("Error creating drop:", error);
-      toast.error("Something went wrong. Please try again.");
-      return;
+      const message = "Something went wrong. Please try again.";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
   //Copy Function
   const handleCopy = async () => {
     if (!generatedLink) return;
@@ -156,7 +167,6 @@ export default function DropPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mx-auto w-full max-w-3xl"
       >
-        {/* Header */}
         <div className="mb-10 text-center">
           <div className="mb-4 inline-flex items-center gap-2  border border-cyan-500/20 bg-cyan-500/5 px-4 py-2 text-sm font-medium text-cyan-600">
             <ShieldCheck size={16} />
@@ -173,9 +183,7 @@ export default function DropPage() {
           </p>
         </div>
 
-        {/* Main Card */}
         <div className="border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-8">
-          {/* Upload Area */}
           {!file ? (
             <label
               htmlFor="file-upload"
@@ -216,7 +224,6 @@ export default function DropPage() {
               </p>
             </label>
           ) : (
-            /* Selected File */
             <div className="border border-cyan-500/20 bg-cyan-500/5 p-5">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-500">
@@ -243,9 +250,7 @@ export default function DropPage() {
             </div>
           )}
 
-          {/* Options */}
           <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -269,7 +274,6 @@ export default function DropPage() {
               </p>
             </div>
 
-            {/* Expiry */}
             <div>
               <label
                 htmlFor="expiry"
@@ -298,11 +302,16 @@ export default function DropPage() {
             </div>
           </div>
 
-          {/* Generate Button */}
+          {error && (
+            <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={handleGenerate}
-            disabled={!file}
+            disabled={!file || isLoading}
             className="group relative mt-8 flex h-13 w-full items-center justify-center gap-2 overflow-hidden bg-cyan-500 px-6 font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none active:scale-95 ease-in-out"
           >
             <span className="absolute inset-0 origin-bottom scale-y-0 bg-cyan-500 transition-transform duration-300 group-hover:scale-y-100" />
@@ -312,11 +321,10 @@ export default function DropPage() {
                 size={18}
                 className="group-hover:transition-transform group-hover:rotate-45 duration-300"
               />
-              Generate Secure Link
+              {isLoading ? "Generating..." : "Generate Secure Link"}
             </span>
           </button>
 
-          {/* Copy link */}
           {generatedLink && (
             <div className="mt-6 border border-cyan-500/20 bg-cyan-500/5 p-5">
               <div className="mb-4 flex items-center gap-2">
@@ -364,7 +372,6 @@ export default function DropPage() {
             </div>
           )}
 
-          {/* Bottom Info */}
           <div className="mt-5 flex items-center justify-center gap-2 text-xs text-slate-400">
             <ShieldCheck size={14} />
             Your files are protected with SmartDrop.

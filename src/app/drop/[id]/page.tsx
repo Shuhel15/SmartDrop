@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import Loader from "@/components/loader";
 
 type Drop = {
@@ -40,21 +39,15 @@ function formatFileSize(bytes: number) {
 }
 
 function getTimeRemaining(expiresAt: string) {
-  const difference =
-    new Date(expiresAt).getTime() - Date.now();
+  const difference = new Date(expiresAt).getTime() - Date.now();
 
   if (difference <= 0) {
     return "Expired";
   }
 
-  const hours = Math.floor(
-    difference / (1000 * 60 * 60),
-  );
+  const hours = Math.floor(difference / (1000 * 60 * 60));
 
-  const minutes = Math.floor(
-    (difference % (1000 * 60 * 60)) /
-      (1000 * 60),
-  );
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
 
   if (hours > 0) {
     return `${hours}h ${minutes}m remaining`;
@@ -72,8 +65,9 @@ export default function DropPage() {
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState("");
-  const [attemptsRemaining, setAttemptsRemaining] =
-    useState<number | null>(null);
+  const [attemptsRemaining, setAttemptsRemaining] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     async function fetchDrop() {
@@ -81,29 +75,20 @@ export default function DropPage() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(
-          `/api/auth/drop/${dropId}`,
-        );
+        const response = await fetch(`/api/auth/drop/${dropId}`);
 
         const data = await response.json();
 
         if (!response.ok) {
-          setError(
-            data.message || "Drop not found.",
-          );
+          setError(data.message || "Drop not found.");
           return;
         }
 
         setDrop(data.drop);
       } catch (error) {
-        console.error(
-          "Error fetching drop:",
-          error,
-        );
+        console.error("Error fetching drop:", error);
 
-        setError(
-          "Unable to load this drop.",
-        );
+        setError("Unable to load this drop.");
       } finally {
         setLoading(false);
       }
@@ -124,33 +109,23 @@ export default function DropPage() {
       setVerifying(true);
       setError("");
 
-      const response = await fetch(
-        `/api/auth/drop/${dropId}/verify`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            password,
-          }),
+      const response = await fetch(`/api/auth/drop/${dropId}/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          password,
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(
-          data.message || "Incorrect password.",
-        );
+        setError(data.message || "Incorrect password.");
 
-        if (
-          typeof data.attemptsRemaining ===
-          "number"
-        ) {
-          setAttemptsRemaining(
-            data.attemptsRemaining,
-          );
+        if (typeof data.attemptsRemaining === "number") {
+          setAttemptsRemaining(data.attemptsRemaining);
         }
 
         return;
@@ -159,31 +134,16 @@ export default function DropPage() {
       setUnlocked(true);
       setAttemptsRemaining(null);
     } catch (error) {
-      console.error(
-        "Error verifying password:",
-        error,
-      );
+      console.error("Error verifying password:", error);
 
-      setError(
-        "Something went wrong. Please try again.",
-      );
+      setError("Something went wrong. Please try again.");
     } finally {
       setVerifying(false);
     }
   }
 
-  function handleView() {
-    toast("File preview will be connected next.");
-  }
-
-  function handleDownload() {
-    toast("File download will be connected next.");
-  }
-
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   if (error && !drop) {
@@ -198,9 +158,7 @@ export default function DropPage() {
             Drop unavailable
           </h1>
 
-          <p className="mt-2 text-sm text-slate-500">
-            {error}
-          </p>
+          <p className="mt-2 text-sm text-slate-500">{error}</p>
         </div>
       </main>
     );
@@ -231,7 +189,6 @@ export default function DropPage() {
           </p>
         </div>
         <div className="border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/50 sm:p-8">
-
           {!unlocked ? (
             <>
               <div className="mb-7 flex items-center gap-4 border border-slate-200 bg-slate-50 p-5">
@@ -245,33 +202,24 @@ export default function DropPage() {
                   </p>
 
                   <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                    <span>
-                      {formatFileSize(drop.fileSize)}
-                    </span>
+                    <span>{formatFileSize(drop.fileSize)}</span>
 
                     <span className="h-1 w-1 rounded-full bg-slate-300" />
 
                     <span className="flex items-center gap-1">
                       <Timer size={13} />
-                      {getTimeRemaining(
-                        drop.expiresAt,
-                      )}
+                      {getTimeRemaining(drop.expiresAt)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
                   className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800"
                 >
-                  <Lock
-                    size={16}
-                    className="text-cyan-500"
-                  />
-
+                  <Lock size={16} className="text-cyan-500" />
                   Enter password
                 </label>
 
@@ -312,18 +260,15 @@ export default function DropPage() {
                 type="button"
                 onClick={handleUnlock}
                 disabled={verifying}
-                className="mt-6 flex h-12 w-full items-center justify-center gap-2 bg-cyan-500 font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-400"
+                className="mt-6 flex h-12 w-full items-center justify-center gap-2 bg-cyan-500 font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-400 active:scale-95 duration-200"
               >
                 <Lock size={18} />
 
-                {verifying
-                  ? "Verifying..."
-                  : "Unlock File"}
+                {verifying ? "Verifying..." : "Unlock File"}
               </button>
 
               <div className="mt-5 flex items-center justify-center gap-2 text-xs text-slate-400">
                 <ShieldCheck size={14} />
-
                 Password protected by SmartDrop
               </div>
             </>
@@ -362,21 +307,29 @@ export default function DropPage() {
                 <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <button
                     type="button"
-                    onClick={handleView}
-                    className="flex h-11 items-center justify-center gap-2 border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600"
+                    onClick={() => {
+                      window.open(`/api/auth/drop/${dropId}/file`, "_blank");
+                    }}
+                    className="flex h-11 items-center justify-center gap-2 border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-all hover:border-cyan-500 hover:text-cyan-600 active:scale-95 duration-200"
                   >
                     <Eye size={17} />
-
                     View File
                   </button>
 
                   <button
                     type="button"
-                    onClick={handleDownload}
-                    className="flex h-11 items-center justify-center gap-2 bg-cyan-500 text-sm font-semibold text-white transition hover:bg-cyan-600"
+                    onClick={() => {
+                      window.open(
+                        `/api/auth/drop/${dropId}/file?download=true`,
+                        "_blank",
+                      );
+                    }}
+                    className="group flex h-11 items-center justify-center gap-2 bg-cyan-500 text-sm font-semibold text-white transition-all hover:bg-cyan-600 active:scale-95 duration-200"
                   >
-                    <Download size={17} />
-
+                    <Download
+                      size={17}
+                      className="group-hover:transition-transform group-hover:translate-y-1 duration-200"
+                    />
                     Download
                   </button>
                 </div>
