@@ -113,15 +113,57 @@ export default function DropPage() {
     setIsLoading(true);
 
     try {
-      const formData = new FormData();
+      // 1. Get secure Cloudinary signature
+      const signatureResponse = await fetch("/api/cloudinary/sign", {
+        method: "POST",
+      });
 
-      formData.append("file", file);
-      formData.append("password", password);
-      formData.append("expiry", expiry);
+      const signatureData = await signatureResponse.json();
 
+      if (!signatureResponse.ok) {
+        throw new Error(
+          signatureData?.message || "Failed to prepare file upload.",
+        );
+      }
+
+      // 2. Upload file directly to Cloudinary
+      const cloudinaryFormData = new FormData();
+
+      cloudinaryFormData.append("file", file);
+      cloudinaryFormData.append("api_key", signatureData.apiKey);
+      cloudinaryFormData.append("timestamp", signatureData.timestamp);
+      cloudinaryFormData.append("signature", signatureData.signature);
+
+      const cloudinaryResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${signatureData.cloudName}/auto/upload`,
+        {
+          method: "POST",
+          body: cloudinaryFormData,
+        },
+      );
+
+      const cloudinaryData = await cloudinaryResponse.json();
+
+      if (!cloudinaryResponse.ok) {
+        throw new Error(
+          cloudinaryData?.error?.message || "File upload failed.",
+        );
+      }
+
+      // 3. Send only file information to our API
       const response = await fetch("/api/auth/drop", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileUrl: cloudinaryData.secure_url,
+          publicId: cloudinaryData.public_id,
+          fileName: file.name,
+          fileSize: file.size,
+          password,
+          expiry,
+        }),
       });
 
       const data = await response.json();
@@ -134,10 +176,16 @@ export default function DropPage() {
       }
 
       setGeneratedLink(`${window.location.origin}${data.link}`);
+
       toast.success("Secure link generated successfully.");
     } catch (error) {
       console.error("Error creating drop:", error);
-      const message = "Something went wrong. Please try again.";
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.";
+
       setError(message);
       toast.error(message);
     } finally {

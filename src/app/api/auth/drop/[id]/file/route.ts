@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
-import { Readable } from "stream";
 import clientPromise from "@/lib/mongodb";
+
 import redis from "@/lib/redis";
-import { getGridFSBucket } from "@/lib/gridfs";
 
 export async function GET(
   request: Request,
@@ -12,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    //Check Redis access
+    // Check Redis access
     const hasAccess = await redis.get(`drop_access:${id}`);
 
     if (!hasAccess) {
@@ -25,7 +23,7 @@ export async function GET(
       );
     }
 
-    //MongoDB
+    // MongoDB
     const client = await clientPromise;
     const db = client.db("smartdrop");
 
@@ -43,7 +41,7 @@ export async function GET(
       );
     }
 
-    //Check expiry
+    // Check expiry
     if (drop.expiresAt && new Date(drop.expiresAt).getTime() <= Date.now()) {
       await redis.del(`drop_access:${id}`);
 
@@ -56,8 +54,8 @@ export async function GET(
       );
     }
 
-    //Validate fileId
-    if (!drop.fileId) {
+    // Validate Cloudinary URL
+    if (!drop.fileUrl) {
       return NextResponse.json(
         {
           success: false,
@@ -67,49 +65,39 @@ export async function GET(
       );
     }
 
-    const fileId =
-      drop.fileId instanceof ObjectId ? drop.fileId : new ObjectId(drop.fileId);
-
-    //Get GridFS bucket
-    const bucket = await getGridFSBucket();
-
-    //Get file information
-    const files = await db.collection("files.files").findOne({
-      _id: fileId,
-    });
-
-    if (!files) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "File not found.",
-        },
-        { status: 404 },
-      );
-    }
-
-    //Open GridFS download stream
-    const downloadStream = bucket.openDownloadStream(fileId);
     const { searchParams } = new URL(request.url);
+
     const download = searchParams.get("download") === "true";
 
-    const disposition = download ? "attachment" : "inline";
 
-    // Convert Node stream to Web stream
-    const webStream = Readable.toWeb(downloadStream) as ReadableStream;
+    // Download mode
+    if (download) {
+      const response = await fetch(drop.fileUrl);
 
-    //Return actual file
-    return new Response(webStream, {
-      status: 200,
-      headers: {
-        "Content-Type":
-          files.metadata?.contentType || "application/octet-stream",
+      if (!response.ok) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Failed to fetch file from Cloudinary.",
+          },
+          { status: 500 },
+        );
+      }
 
-        "Content-Disposition": `${disposition}; filename="${files.filename}"`,
+      const fileBuffer = await response.arrayBuffer();
 
-        "Cache-Control": "private, no-store",
-      },
-    });
+      return new Response(fileBuffer, {
+        status: 200,
+        headers: {
+          "Content-Type":
+            response.headers.get("content-type") || "application/octet-stream",
+          "Content-Disposition": `attachment; filename="${drop.fileName}"`,
+          "Cache-Control": "private, no-store",
+        },
+      });
+    }
+
+    return NextResponse.redirect(drop.fileUrl);
   } catch (error) {
     console.error("File access error:", error);
 
